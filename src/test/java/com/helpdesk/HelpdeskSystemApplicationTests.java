@@ -1,4 +1,4 @@
-package com.helpdesk.helpdesk_system;
+package com.helpdesk;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

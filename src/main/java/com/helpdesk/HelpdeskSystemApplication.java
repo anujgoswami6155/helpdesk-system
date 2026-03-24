@@ -1,4 +1,4 @@
-package com.helpdesk.helpdesk_system;
+package com.helpdesk;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class HelpdeskSystemApplication {
 
 	public static void main(String[] args) {
+
 		SpringApplication.run(HelpdeskSystemApplication.class, args);
 	}
 
