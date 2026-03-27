@@ -42,4 +42,14 @@ public class UserService {
                 .map(user -> new UserResponse(user.getId(), user.getName(), user.getEmail(), user.getRole()))
                 .collect(Collectors.toList());
     }
+
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+    }
+
+    public User getUserEntityById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+    }
 }
