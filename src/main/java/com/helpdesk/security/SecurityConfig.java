@@ -30,6 +30,7 @@ public class SecurityConfig {
                         // admin only
                         .requestMatchers("/api/tickets/*/assign").hasRole("ADMIN")
                         .requestMatchers("/api/categories/**").hasRole("ADMIN")
+                        .requestMatchers("/api/tickets").hasRole("ADMIN")
 
                         // agent only
                         .requestMatchers("/api/tickets/*/status").hasRole("SUPPORT_AGENT")
