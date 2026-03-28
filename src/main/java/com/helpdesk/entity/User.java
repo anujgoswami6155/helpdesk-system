@@ -1,5 +1,6 @@
 package com.helpdesk.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.helpdesk.enums.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -23,6 +24,7 @@ public class User {
     @Column(nullable = false, unique = true)
     private String email;
 
+    @JsonIgnore
     @Column(nullable = false)
     private String password;
 
