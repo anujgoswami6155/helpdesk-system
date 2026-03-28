@@ -4,10 +4,12 @@ import com.helpdesk.entity.Comment;
 import com.helpdesk.entity.Ticket;
 import com.helpdesk.service.CommentService;
 import com.helpdesk.service.TicketService;
+import com.helpdesk.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.Authentication;
 
 import java.util.List;
 
@@ -16,14 +18,18 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CommentController {
 
+    private final UserService userService;
     private final TicketService ticketService;
     private final CommentService commentService;
 
     @PostMapping
     public ResponseEntity<Comment> addComment(@PathVariable Long ticketId,
-                                              @RequestBody Comment comment) {
+                                              @RequestBody Comment comment,
+                                              Authentication authentication) {
         comment.setTicket(ticketService.getTicketById(ticketId));
-        return ResponseEntity.status(HttpStatus.CREATED).body(commentService.addComment(comment));
+        comment.setAuthor(userService.getUserByEmail(authentication.getName()));
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(commentService.addComment(comment));
     }
 
     @GetMapping
