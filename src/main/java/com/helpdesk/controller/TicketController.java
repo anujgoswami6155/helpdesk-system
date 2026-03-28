@@ -8,6 +8,8 @@ import com.helpdesk.service.TicketService;
 import com.helpdesk.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,44 +25,45 @@ public class TicketController {
     private final TicketService ticketService;
 
     @PostMapping
-    public Ticket createTicket(@Valid @RequestBody TicketRequest request,
-                               Authentication authentication) {
+    public ResponseEntity<Ticket> createTicket(@Valid @RequestBody TicketRequest request,
+                                               Authentication authentication) {
         User user = userService.getUserByEmail(authentication.getName());
-        return ticketService.createTicket(request, user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(ticketService.createTicket(request, user));
     }
 
     @GetMapping
-    public List<Ticket> getAllTickets() {
-        return ticketService.getAllTickets();
+    public ResponseEntity<List<Ticket>> getAllTickets() {
+        return ResponseEntity.ok(ticketService.getAllTickets());
     }
 
     @GetMapping("/{id}")
-    public Ticket getTicketById(@PathVariable Long id) {
-        return ticketService.getTicketById(id);
+    public ResponseEntity<Ticket> getTicketById(@PathVariable Long id) {
+        return ResponseEntity.ok(ticketService.getTicketById(id));
     }
 
     @GetMapping("/my")
-    public List<Ticket> getMyTickets(Authentication authentication) {
+    public ResponseEntity<List<Ticket>> getMyTickets(Authentication authentication) {
         User user = userService.getUserByEmail(authentication.getName());
-        return ticketService.getTicketsByUser(user);
+        return ResponseEntity.ok(ticketService.getTicketsByUser(user));
     }
 
     @PutMapping("/{id}/assign")
-    public Ticket assignTicket(@PathVariable Long id,
-                               @RequestBody Map<String, Long> body) {
+    public ResponseEntity<Ticket> assignTicket(@PathVariable Long id,
+                                               @RequestBody Map<String, Long> body) {
         User agent = userService.getUserEntityById(body.get("agentId"));
-        return ticketService.assignTicket(id, agent);
+        return ResponseEntity.ok(ticketService.assignTicket(id, agent));
     }
 
     @PutMapping("/{id}/status")
-    public Ticket updateStatus(@PathVariable Long id,
-                               @RequestBody Map<String, String> body) {
+    public ResponseEntity<Ticket> updateStatus(@PathVariable Long id,
+                                               @RequestBody Map<String, String> body) {
         Status status = Status.valueOf(body.get("status"));
-        return ticketService.updateTicketStatus(id, status);
+        return ResponseEntity.ok(ticketService.updateTicketStatus(id, status));
     }
 
     @DeleteMapping("/{id}")
-    public void deleteTicket(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteTicket(@PathVariable Long id) {
         ticketService.deleteTicket(id);
+        return ResponseEntity.noContent().build();
     }
 }
