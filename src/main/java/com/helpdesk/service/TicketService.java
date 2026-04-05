@@ -4,6 +4,7 @@ import com.helpdesk.dto.TicketRequest;
 import com.helpdesk.entity.Category;
 import com.helpdesk.entity.Ticket;
 import com.helpdesk.entity.User;
+import com.helpdesk.enums.Role;
 import com.helpdesk.enums.Status;
 import com.helpdesk.repository.CategoryRepository;
 import com.helpdesk.repository.TicketRepository;
@@ -51,6 +52,10 @@ public class TicketService {
     }
 
     public Ticket assignTicket(Long id, User agent) {
+        if (agent.getRole() != Role.SUPPORT_AGENT) {
+            throw new RuntimeException("User with id " + agent.getId() +
+                    " is not a Support Agent");
+        }
         Ticket ticket = getTicketById(id);
         ticket.setAssignedTo(agent);
         ticket.setStatus(Status.ASSIGNED);
